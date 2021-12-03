@@ -57,6 +57,7 @@ class PointNetV0(PointBackbone):
         :param mask: [B, N] ([batch size, n_points]) provides which part of point cloud should be considered
         :return: [B, F] ([batch size, final output dim])
         """
+        dev = state.device
         if isinstance(pcd, dict):
             pcd = pcd.copy()
             mask = torch.ones_like(pcd['xyz'][..., :1]) if mask is None else mask[..., None]  # [B, N, 1]
@@ -66,12 +67,21 @@ class PointNetV0(PointBackbone):
                 mean_xyz = masked_average(xyz, 1, mask=mask, keepdim=True)  # [B, 1, 3]
                 pcd['mean_xyz'] = mean_xyz.repeat(1, xyz.shape[1], 1)
                 pcd['xyz'] = xyz - mean_xyz
+                #position jittering
+                #pos_jitter_scale = 0.002
+                pcd['xyz'] = pcd['xyz'] + torch.tensor(0.002).to(dev) * (torch.rand(xyz.shape).to(dev) - torch.tensor(0.5).to(dev))
+            # apply random color channel permutation
+            p = torch.randperm(3)
+            #color_jitter_scale =0.05
+            pcd['rgb'] = pcd['rgb'][:,:,p] + torch.tensor(0.05).to(dev) * (torch.rand(3).to(dev)-torch.tensor(0.5).to(dev))
+
             # Concat all elements like xyz, rgb, seg mask, mean_xyz
             pcd = torch.cat(dict_to_seq(pcd)[1], dim=-1)
         else:
             mask = torch.ones_like(pcd[..., :1]) if mask is None else mask[..., None]  # [B, N, 1]
 
         B, N = pcd.shape[:2]
+
         state = torch.cat([pcd, state[:, None].repeat(1, N, 1)], dim=-1)  # [B, N, CS]
         point_feature = self.conv_mlp(state.transpose(2, 1)).transpose(2, 1)  # [B, N, CF]
         # [B, K, N / K, CF]

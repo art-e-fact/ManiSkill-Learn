@@ -58,16 +58,20 @@ class SapienRLWrapper(ObservationWrapper):
         super(SapienRLWrapper, self).__init__(env)
         self.stack_frame = stack_frame
         self.buffered_data = {}
+        self.t = 0
 
     def get_state(self):
         return self.env.get_state(True)
 
     def _update_buffer(self, obs):
+        self.t += 1
         for key in obs:
             if key not in self.buffered_data:
                 self.buffered_data[key] = deque([obs[key]] * self.stack_frame, maxlen=self.stack_frame)
             else:
                 self.buffered_data[key].append(obs[key])
+        #if "pcd" in obs and self.stack_frame > 1:
+        #    self.buffered_data["t"].append([t] * len(obs[]))
 
     def _get_buffer_content(self):
         axis = 0 if self.obs_mode == 'pointcloud' else -1

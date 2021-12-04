@@ -6,6 +6,7 @@ import shutil
 import time
 from copy import deepcopy
 
+
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ["MKL_NUM_THREADS"] = "1"
 os.environ["NUMEXPR_NUM_THREADS"] = "1"
@@ -31,11 +32,11 @@ def parse_args():
     parser.add_argument('config', help='train config file path')
     parser.add_argument('--cfg-options', nargs='+', action=DictAction,
                         help='override some settings in the used config, the key-value pair '
-                             'in xxx=yyy format will be merged into config file. If the value to '
-                             'be overwritten is a list, it should be like key="[a,b]" or key=a,b '
-                             'It also allows nested list/tuple values, e.g. key="[(a,b),(c,d)]" '
-                             'Note that the quotation marks are necessary and that no white space '
-                             'is allowed.')
+                        'in xxx=yyy format will be merged into config file. If the value to '
+                        'be overwritten is a list, it should be like key="[a,b]" or key=a,b '
+                        'It also allows nested list/tuple values, e.g. key="[(a,b),(c,d)]" '
+                        'Note that the quotation marks are necessary and that no white space '
+                        'is allowed.')
 
     # Parameters for log dir
     parser.add_argument('--work-dir', help='the dir to save logs and models')
@@ -55,7 +56,7 @@ def parse_args():
     # If we resume checkpoint model
     parser.add_argument('--resume-from', default=None, help='the checkpoint file to resume from')
     parser.add_argument('--auto-resume', help='Auto-resume the checkpoint under work dir, '
-                                              'the default value is true when in evaluation mode', action='store_true')
+                        'the default value is true when in evaluation mode', action='store_true')
 
     # Specify GPU
     group_gpus = parser.add_mutually_exclusive_group()
@@ -96,9 +97,9 @@ def main_mfrl_brl(cfg, args, rollout, evaluator, logger):
         agent.to('cuda')
 
     if (cfg.get('eval_cfg', None) is not None and (cfg.eval_cfg.get('num_procs', 1) > 1 and
-                                                  not cfg.eval_cfg.get('synchronize', True)) or
-        (cfg.get('rollout_cfg', None) is not None and cfg.rollout_cfg.get('num_procs', 1) > 1 and
-                                                  not cfg.eval_cfg.get('synchronize', True))):
+                                                   not cfg.eval_cfg.get('synchronize', True)) or
+            (cfg.get('rollout_cfg', None) is not None and cfg.rollout_cfg.get('num_procs', 1) > 1 and
+             not cfg.eval_cfg.get('synchronize', True))):
         agent.share_memory()
 
     if not (dist.is_available() and dist.is_initialized()):

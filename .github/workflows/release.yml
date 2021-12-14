@@ -16,7 +16,7 @@ jobs:
           aws-region: ap-northeast-1
       - name: Download model
         run: |
-          aws s3 cp s3://test-maniskill-models/OpenCabinetDrawer.ckpt models/.
+          aws s3 cp s3://maniskill-models/OpenCabinetDrawer.ckpt models/.
       - name: create release
         run: |
           make submission

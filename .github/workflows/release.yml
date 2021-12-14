@@ -1,0 +1,26 @@
+name: publish release
+on:
+  release:
+    types:
+      - created
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-1
+      - name: Download model
+        run: |
+          aws s3 cp s3://test-maniskill-models/OpenCabinetDrawer.ckpt models/.
+      - name: create release
+        run: |
+          make submission
+      - name: Upload release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: submission.zip

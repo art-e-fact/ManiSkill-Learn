@@ -6,17 +6,13 @@ jobs:
     name: A job to say hello
     steps:
       - uses: actions/checkout@v2
-      - name: Checkout warp-art/action-buildtest
-        uses: actions/checkout@v2
+      - name: Private actions checkout
+        uses: daspn/private-actions-checkout@v2
         with:
-          repository: warp-art/awesome-action
-          ref: refs/heads/master
-          # GitHub's personal access token with access to `my-organization/awesome-action`
-          token: ${{secrets.APP_KEY}}
-          persist-credentials: false
-          path: ./.github/actions/action-buildtest
+          actions_list: '["warp-art/action-buildtest@main"]'
+          checkout_base_path: ./.github/actions
+          app_id: ${{ secrets.APP_ID }}
+          app_private_key: ${{ secrets.APP_PRIVATE_KEY }}
       - uses: ./.github/actions/action-buildtest
         with:
           who-to-greet: 'Mona the Octocat'
-      - run: echo random-number ${{ steps.foo.outputs.random-number }}
-        shell: bash

@@ -13,6 +13,9 @@ jobs:
           checkout_base_path: ./.github/actions
           app_id: ${{ secrets.APP_ID }}
           app_private_key: ${{ secrets.APP_PRIVATE_KEY }}
+      - name: Download model
+        run: |
+          aws s3 cp s3://maniskill-models/OpenCabinetDrawer.ckpt .
       - uses: ./.github/actions/action-buildtest
         with:
           who-to-greet: 'Mona the Octocat'

@@ -1,4 +1,4 @@
-FROM 033416840546.dkr.ecr.ap-northeast-1.amazonaws.com/test_sapien:latest
+FROM 280607528988.dkr.ecr.ap-northeast-1.amazonaws.com/test_sapien:latest
 RUN git clone https://github.com/haosulab/ManiSkill.git
 WORKDIR ManiSkill
 RUN pip install --no-cache-dir -r requirements.txt && pip install --no-cache-dir -e .

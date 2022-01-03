@@ -1,10 +1,17 @@
-name: publish release
+name: pre release
 on:
-  release:
+  workflow_dispatch:
+  discussion:
     types:
       - created
+      - edited
+      - answered
+  discussion_comment:
+  issue_comment:
 jobs:
-  publish:
+  package-submission:
+    name: PR comment
+    if: ${{ contains(github.event.comment, '/package') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

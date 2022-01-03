@@ -1,9 +1,9 @@
 on: [push]
 
 jobs:
-  hello_world_job:
+  maniskil_test:
     runs-on: ubuntu-latest
-    name: A job to say hello
+    name: Run ManiSkill test in Sapien
     steps:
       - uses: actions/checkout@v2
       - name: checkout modified ManiSkill repo
@@ -31,6 +31,4 @@ jobs:
           aws s3 cp s3://maniskill-models/OpenCabinetDrawer.ckpt .
       - uses: ./.github/actions/action-buildtest
         with:
-          who-to-greet: 'Mona the Octocat'
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          account_id: action_test

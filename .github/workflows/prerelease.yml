@@ -27,7 +27,7 @@ jobs:
       - name: create release
         run: |
           make submission
-       - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v2
         with:
-          name: my-artifact
+          name: submission.zip
           path: submission.zip

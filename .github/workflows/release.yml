@@ -1,8 +1,13 @@
 name: publish release
 on:
-  release:
+  workflow_dispatch:
+  discussion:
     types:
       - created
+      - edited
+      - answered
+  discussion_comment:
+  issue_comment:
 jobs:
   publish:
     runs-on: ubuntu-latest

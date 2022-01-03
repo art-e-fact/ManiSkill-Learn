@@ -10,8 +10,8 @@ on:
   issue_comment:
 jobs:
   package-submission:
-    name: PR comment
-    if: ${{ contains(github.event.comment, '/package') }}
+    name: comment triggered(package)
+    if: ${{ contains(github.event.comment.body, '/package') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

@@ -5,13 +5,13 @@ RUN apt-get update -y  && apt-get install -y \
   tzdata unzip git curl libglib2.0-0 \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get clean
-RUN git clone -b feature/run-basic https://github.com/warp-art/ManiSkill.git
+COPY ManiSkill ManiSkill
 WORKDIR ManiSkill
 RUN pip install --no-cache-dir -r requirements.txt && pip install --no-cache-dir -e .
 RUN pip install --no-cache-dir torch==1.10.0+cu113 torchvision==0.11.1+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html
 RUN mkdir ManiSkill-Learn
 WORKDIR ManSkill-Learn
-COPY mani_skill_learn mani_skil_learn
+COPY mani_skill_learn mani_skill_learn
 COPY requirements.txt requirements.txt
 COPY setup.py setup.py
 RUN pip install --no-cache-dir -r requirements.txt && pip install -e .
@@ -21,6 +21,5 @@ RUN apt-get update -y  && apt-get install -y \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get clean
 COPY OpenCabinetDrawer.ckpt ManiSkill-Learn/.
-COPY eval.sh .
-COPY to_neptune.py .
+WORKDIR /ManiSkill
 CMD ./eval.sh

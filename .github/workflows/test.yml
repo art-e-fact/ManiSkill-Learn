@@ -6,6 +6,13 @@ jobs:
     name: A job to say hello
     steps:
       - uses: actions/checkout@v2
+      - name: checkout modified ManiSkill repo
+        uses: actions/checkout@v2
+        with:
+          repository: 'warp-art/ManiSkill'
+          ref: "feature/run-basic"
+          token: ${{ secrets.PAT_TOKEN }}
+          path: 'ManiSkill'
       - name: Private actions checkout
         uses: daspn/private-actions-checkout@v2
         with:

@@ -29,5 +29,17 @@ jobs:
           make submission
       - uses: actions/upload-artifact@v2
         with:
-          name: submissions
-          path: submission_*.zip
+          name: submission_OpenCabinetDoor
+          path: submission_OpenCabinetDoor.zip
+      - uses: actions/upload-artifact@v2
+        with:
+          name: submission_OpenCabinetDrawer
+          path: submission_OpenCabinetDrawer.zip
+      - uses: actions/upload-artifact@v2
+        with:
+          name: submission_PushChair
+          path: submission_PushChair.zip
+      - uses: actions/upload-artifact@v2
+        with:
+          name: submission_MoveBucket
+          path: submission_MoveBucket.zip

@@ -1,2 +1,2 @@
 cfg: "configs/bc/2tasks3.py"
-ckpt: "models/OpenCabinetDrawer.ckpt"
+ckpt: "models/OpenCabinetDoor_OpenCabinetDrawer.ckpt"

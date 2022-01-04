@@ -12,9 +12,6 @@ from mani_skill_learn.utils.data import to_np, unsqueeze
 from mani_skill_learn.utils.meta import Config
 from mani_skill_learn.utils.torch import load_checkpoint
 
-with open('config.yml', 'r') as f:
-    conf = yaml.safe_load(f)
-
 class ObsProcess:
     # modified from SapienRLWrapper
     def __init__(self, env, obs_mode, stack_frame=1):
@@ -71,8 +68,12 @@ class UserPolicy(BasePolicy):
         self.env.set_env_mode(obs_mode=self.obs_mode)
         self.stack_frame = 1
 
+        task_config_path = os.path.join(os.path.dirname(__file__), 'config.yml')
+        with open(task_config_path, 'r') as f:
+            task_config = yaml.safe_load(f)
+
         #cfg_path = str(pathlib.Path('./configs/bc/2tasks3.py').resolve())
-        cfg_path = os.path.join(os.path.dirname(__file__), config["cfg"])
+        cfg_path = os.path.join(os.path.dirname(__file__), task_config["cfg"])
         cfg = Config.fromfile(cfg_path)
         cfg.env_cfg['env_name'] = env_name
         obs_shape, action_shape, action_space = get_env_info(cfg.env_cfg)
@@ -82,7 +83,7 @@ class UserPolicy(BasePolicy):
 
         self.agent = build_brl(cfg.agent)
         load_checkpoint(self.agent,
-            os.path.join(os.path.dirname(__file__), config["ckpt"]),
+            os.path.join(os.path.dirname(__file__), task_config["ckpt"]),
             map_location='cpu'
         )
         self.agent.to('cuda')  # dataparallel not done here

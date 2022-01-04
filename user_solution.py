@@ -1,7 +1,7 @@
 import pathlib
 import os
 from collections import deque
-
+import yaml
 import gym
 import numpy as np
 
@@ -12,6 +12,8 @@ from mani_skill_learn.utils.data import to_np, unsqueeze
 from mani_skill_learn.utils.meta import Config
 from mani_skill_learn.utils.torch import load_checkpoint
 
+with open('config.yml', 'r') as f:
+    conf = yaml.safe_load(f)
 
 class ObsProcess:
     # modified from SapienRLWrapper
@@ -70,7 +72,7 @@ class UserPolicy(BasePolicy):
         self.stack_frame = 1
 
         #cfg_path = str(pathlib.Path('./configs/bc/2tasks3.py').resolve())
-        cfg_path = os.path.join(os.path.dirname(__file__), 'configs/bc/2tasks3.py')
+        cfg_path = os.path.join(os.path.dirname(__file__), config[env_name]["cfg"])
         cfg = Config.fromfile(cfg_path)
         cfg.env_cfg['env_name'] = env_name
         obs_shape, action_shape, action_space = get_env_info(cfg.env_cfg)
@@ -80,7 +82,7 @@ class UserPolicy(BasePolicy):
 
         self.agent = build_brl(cfg.agent)
         load_checkpoint(self.agent,
-            os.path.join(os.path.dirname(__file__), 'models/model_50000_drawer_door.ckpt'),
+            os.path.join(os.path.dirname(__file__), config[env_name]["ckpt"]),
             map_location='cpu'
         )
         self.agent.to('cuda')  # dataparallel not done here

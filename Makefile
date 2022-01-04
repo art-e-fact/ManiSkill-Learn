@@ -1,3 +1,3 @@
 submission:
-	git archive -o submission.zip HEAD
-	zip -ur submission.zip models/OpenCabinetDrawer.ckpt
+	git archive -o submission.zip HEAD ;\
+	zip -ur submission.zip models/*.ckpt ;\

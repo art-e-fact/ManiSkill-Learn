@@ -1,0 +1,2 @@
+cfg: "configs/bc/mani_skill_point_cloud_transformer.py "
+ckpt: "models/MoveBucket-v0_PN_Transformer.ckpt"

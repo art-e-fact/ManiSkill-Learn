@@ -11,7 +11,7 @@ on:
 jobs:
   package_submission:
     name: comment triggered(package)
-    if: ${{ contains(github.event.comment.body, '/package') }}
+    if: ${{ github.event.comment == null || contains(github.event.comment.body, '/package') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -23,11 +23,11 @@ jobs:
           aws-region: ap-northeast-1
       - name: Download model
         run: |
-          aws s3 cp s3://maniskill-models/*.ckpt models/.
+          aws s3 cp s3://maniskill-models/ models/ --recursive --exclude "*" --include "*.ckpt"
       - name: create release
         run: |
           make submission
       - uses: actions/upload-artifact@v2
         with:
-          name: submission.zip
-          path: submission.zip
+          name: submissions
+          path: submission_*.zip

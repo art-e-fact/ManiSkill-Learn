@@ -1,0 +1,2 @@
+cfg: "configs/bc/2tasks3.py"
+ckpt: "models/OpenCabinetDrawer.ckpt"

@@ -16,12 +16,12 @@ jobs:
           aws-region: ap-northeast-1
       - name: Download model
         run: |
-          aws s3 cp s3://maniskill-models/*.ckpt models/.
+          aws s3 cp s3://maniskill-models/ models/ --recursive --exclude "*" --include "*.ckpt"
       - name: create release
         run: |
           make submission
       - name: Upload release
         uses: softprops/action-gh-release@v1
         with:
-          files: submission.zip
-          name: submission.zip
+          files: submission_*.zip
+          name: submissions

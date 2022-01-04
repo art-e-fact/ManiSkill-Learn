@@ -72,7 +72,7 @@ class UserPolicy(BasePolicy):
         self.stack_frame = 1
 
         #cfg_path = str(pathlib.Path('./configs/bc/2tasks3.py').resolve())
-        cfg_path = os.path.join(os.path.dirname(__file__), config[env_name]["cfg"])
+        cfg_path = os.path.join(os.path.dirname(__file__), config["cfg"])
         cfg = Config.fromfile(cfg_path)
         cfg.env_cfg['env_name'] = env_name
         obs_shape, action_shape, action_space = get_env_info(cfg.env_cfg)
@@ -82,7 +82,7 @@ class UserPolicy(BasePolicy):
 
         self.agent = build_brl(cfg.agent)
         load_checkpoint(self.agent,
-            os.path.join(os.path.dirname(__file__), config[env_name]["ckpt"]),
+            os.path.join(os.path.dirname(__file__), config["ckpt"]),
             map_location='cpu'
         )
         self.agent.to('cuda')  # dataparallel not done here

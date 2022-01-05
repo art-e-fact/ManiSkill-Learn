@@ -39,7 +39,16 @@ def load_h5s_as_list_dict_array(h5):
     dict_array = load_h5_as_dict_array(h5)
     ret = []
     for key in dict_array:
-        ret.append(dict_array[key])
+        traj = dict_array[key]
+        task_name = h5.split("/")[-1].split("_")[0]
+        task_mapping = {
+            "OpenCabinetDrawer": [0, 1],
+            "OpenCabinetDoor": [1, 0],
+            "PushChair": [0, 1],
+            "MoveBucket": [1, 0],
+        }
+        traj["obs"]["task"] = [task_mapping[task_name]]*len(traj["dones"])
+        ret.append(traj)
     return ret
 
 

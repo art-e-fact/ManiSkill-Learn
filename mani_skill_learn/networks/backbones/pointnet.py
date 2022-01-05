@@ -100,7 +100,7 @@ class PointNetV0(PointBackbone):
 
 @BACKBONES.register_module()
 class PointNetWithInstanceInfoV0(PointBackbone):
-    def __init__(self, pcd_pn_cfg, state_mlp_cfg, final_mlp_cfg, stack_frame, num_objs, transformer_cfg=None):
+    def __init__(self, pcd_pn_cfg, state_mlp_cfg, final_mlp_cfg, stack_frame, num_objs, transformer_cfg=None, task_id=None):
         """
         PointNet with instance segmentation masks.
         There is one MLP that processes the agent state, and (num_obj + 2) PointNets that process background points
@@ -129,7 +129,7 @@ class PointNetWithInstanceInfoV0(PointBackbone):
         self.num_objs = num_objs
         assert self.num_objs > 0
 
-    def forward_raw(self, pcd, state):
+    def forward_raw(self, pcd, state, task):
         """
         :param pcd: point cloud
                 xyz: shape (l, n_points, 3)
@@ -147,7 +147,7 @@ class PointNetWithInstanceInfoV0(PointBackbone):
             obj_masks.append(seg[..., i])
         obj_masks.append(torch.ones_like(seg[..., 0])) # the entire point cloud
 
-        obj_features = [] 
+        obj_features = []
         obj_features.append(self.state_mlp(state))
         for i in range(len(obj_masks)):
             obj_mask = obj_masks[i]
@@ -163,6 +163,13 @@ class PointNetWithInstanceInfoV0(PointBackbone):
         else:
             global_feature = torch.cat(obj_features, dim=-1)  # [B, (NO + 3) * F]
         # print('Y', global_feature.shape)
+        #if task_id != None:
+        #    print(global_feature.shape)
+        #    if task_id == 1:
+        #        task_encoding = self.task_encoding*torch.ones((seg.shape[0], 2))
+        #    global_feature = torch.cat([global_features, task_encoding])
+        #print(global_feature.shape, task.shape)
+        global_feature = torch.cat([global_feature, task], dim=1)
         x = self.global_mlp(global_feature)
         # print(x)
         return x

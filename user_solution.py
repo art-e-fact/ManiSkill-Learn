@@ -4,7 +4,7 @@ from collections import deque
 import yaml
 import gym
 import numpy as np
-
+import torch
 from mani_skill_learn.env import get_env_info
 from mani_skill_learn.env.observation_process import process_mani_skill_base
 from mani_skill_learn.methods.builder import build_brl
@@ -14,7 +14,7 @@ from mani_skill_learn.utils.torch import load_checkpoint
 
 class ObsProcess:
     # modified from SapienRLWrapper
-    def __init__(self, env, obs_mode, stack_frame=1):
+    def __init__(self, env, obs_mode, stack_frame=1, task=None):
         """
         Stack k last frames for point clouds or rgbd
         """
@@ -22,6 +22,15 @@ class ObsProcess:
         self.obs_mode = obs_mode
         self.stack_frame = stack_frame
         self.buffered_data = {}
+        self.task_encoding = None
+        if task != None:
+            task_mapping = {
+                "OpenCabinetDrawer": torch.asarray([0, 1]),
+                "OpenCabinetDoor": torch.asarray([1, 0]),
+                "PushChair": [0, 1],
+                "MoveBucket": [1, 0],
+            }
+            self.task_encoding = task_mapping[task]
 
     def _update_buffer(self, obs):
         for key in obs:
@@ -46,6 +55,7 @@ class ObsProcess:
         ret = {}
         ret[self.obs_mode] = visual_data
         ret['state'] = state
+        ret['task'] = self.task_encoding
         return ret
 
 
@@ -89,7 +99,7 @@ class UserPolicy(BasePolicy):
         self.agent.to('cuda')  # dataparallel not done here
         self.agent.eval()
 
-        self.obsprocess = ObsProcess(self.env, self.obs_mode, self.stack_frame)
+        self.obsprocess = ObsProcess(self.env, self.obs_mode, self.stack_frame, task_config["task"])
 
     def act(self, observation):
         ##### Replace with your code

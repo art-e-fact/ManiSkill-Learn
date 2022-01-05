@@ -154,7 +154,6 @@ class Evaluation:
                 data_to_store[f'next_{key}'] = env_state[key]
             """
             from mani_skill_learn.utils.data import get_shape_and_type
-            print(list(data_to_store.keys()))
             for key in data_to_store.keys():
                 print(key, get_shape_and_type(data_to_store[key]))
             exit(0)

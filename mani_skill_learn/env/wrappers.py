@@ -89,6 +89,15 @@ class SapienRLWrapper(ObservationWrapper):
         ret = {}
         ret[self.obs_mode] = visual_data
         ret['state'] = state
+        task = self.env.spec.id.split("_")[0]
+        task_mapping = {
+            "OpenCabinetDrawer": np.array([0, 1]),
+            "OpenCabinetDoor": np.array([1, 0]),
+            "PushChair": [0, 1],
+            "MoveBucket": [1, 0],
+        }
+        task_encoding = task_mapping[task]
+        ret['task'] = task_encoding
         return ret
 
     def get_obs(self):

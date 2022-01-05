@@ -79,6 +79,7 @@ def process_mani_skill_base(obs, env=None):
         obs[obs_mode]['seg'] = chosen_seg
         obs[obs_mode]['xyz'] = chosen_xyz
         obs[obs_mode]['rgb'] = chosen_rgb
+
         return obs
     else:
         print(f'Unknown observation mode {obs_mode}')

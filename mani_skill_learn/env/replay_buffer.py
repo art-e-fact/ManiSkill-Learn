@@ -110,7 +110,6 @@ class ReplayDisk(ReplayMemory):
         self.keys = ['obs', 'actions', 'next_obs', 'rewards', 'dones'] if keys is None else keys
         self.h5_files = []
         self.h5_size = []
-        self.h5_task = []
         self.h5_idx = 0
         self.idx_in_h5 = 0
 
@@ -135,14 +134,12 @@ class ReplayDisk(ReplayMemory):
             else:
                 for name in h5_files:
                     from mani_skill_learn.utils.data import get_one_shape
-                    file_data = h5py.File(name, 'r')
-                    self.h5_files.append(file_data)
+                    self.h5_files.append(h5py.File(name, 'r'))
                     length = get_one_shape(self.h5_files[-1])[0]
                     index = eval(osp.basename(name).split('.')[0].split('_')[-1])
                     assert file_size[index] == length
                     assert check_md5sum(name, file_md5[index])
                     self.h5_size.append(file_size[index])
-                    self.h5_task.append(name.split("/")[-1].split("_")[0])
         shuffle(self.h5_files)
         self.h5_idx = 0
         self.idx_in_h5 = 0

@@ -25,10 +25,10 @@ class ObsProcess:
         self.task_encoding = None
         if task != None:
             task_mapping = {
-                "OpenCabinetDrawer": torch.asarray([0, 1]),
-                "OpenCabinetDoor": torch.asarray([1, 0]),
-                "PushChair": [0, 1],
-                "MoveBucket": [1, 0],
+                "OpenCabinetDrawer": torch.tensor([0, 1]),
+                "OpenCabinetDoor": torch.tensor([1, 0]),
+                "PushChair": torch.tensor([0, 1]),
+                "MoveBucket": torch.tensor([1, 0]),
             }
             self.task_encoding = task_mapping[task]
 

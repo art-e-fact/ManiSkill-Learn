@@ -20,6 +20,5 @@ RUN apt-get update -y  && apt-get install -y \
   ffmpeg \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get clean
-COPY OpenCabinetDrawer.ckpt ManiSkill-Learn/.
 WORKDIR /ManiSkill
 CMD ./eval.sh

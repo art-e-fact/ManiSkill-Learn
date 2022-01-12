@@ -16,15 +16,20 @@ class BC(BaseAgent):
     def __init__(self, policy_cfg, obs_shape, action_shape, action_space, batch_size=128):
         super(BC, self).__init__()
         self.batch_size = batch_size
-
         policy_optim_cfg = policy_cfg.pop("optim_cfg")
 
         policy_cfg['obs_shape'] = obs_shape
         policy_cfg['action_shape'] = action_shape
         policy_cfg['action_space'] = action_space
 
+        if "lr_one_cycle_steps" in policy_cfg:
+            lr_one_cycle_steps = policy_cfg.pop("lr_one_cycle_steps")
         self.policy = build_model(policy_cfg)
         self.policy_optim = build_optimizer(self.policy, policy_optim_cfg)
+        self.lr_scheduler = None
+        self.lr = policy_optim_cfg["lr"]
+        if "lr_one_cycle_steps" in policy_cfg:
+            self.lr_scheduler = torch.optim.lr_scheduler.OneCycleLR(self.policy_optim, max_lr=8e-4, total_steps=lr_one_cycle_steps)
 
     def update_parameters(self, memory, updates):
         sampled_batch = memory.sample(self.batch_size)
@@ -38,7 +43,16 @@ class BC(BaseAgent):
         self.policy_optim.zero_grad()
         policy_loss.backward()
         self.policy_optim.step()
+        try:
+            if self.lr_scheduler is not None:
+                self.lr_scheduler.step()
+        except ValueError as e:
+            pass
+        lr = self.lr
+        if self.lr_scheduler is not None:
+            lr = self.scheduler.get_last_lr()
         return {
             'policy_abs_error': torch.abs(pred_action - sampled_batch['actions']).sum(-1).mean().item(),
-            'policy_loss': policy_loss.item()
+            'policy_loss': policy_loss.item(),
+            'lr': lr
         }

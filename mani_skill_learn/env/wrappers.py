@@ -89,7 +89,7 @@ class SapienRLWrapper(ObservationWrapper):
         ret = {}
         ret[self.obs_mode] = visual_data
         ret['state'] = state
-        task = self.env.spec.id.split("_")[0]
+        task = self.env.spec.id.split("-")[0].split("_")[0]
         task_mapping = {
             "OpenCabinetDrawer": np.array([0, 1]),
             "OpenCabinetDoor": np.array([1, 0]),

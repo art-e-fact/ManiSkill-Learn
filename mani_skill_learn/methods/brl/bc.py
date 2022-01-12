@@ -28,7 +28,8 @@ class BC(BaseAgent):
         self.policy_optim = build_optimizer(self.policy, policy_optim_cfg)
         self.lr_scheduler = None
         self.lr = policy_optim_cfg["lr"]
-        if "lr_one_cycle_steps" in policy_cfg:
+        if lr_one_cycle_steps is not None:
+            print("Using OneCycleLR")
             self.lr_scheduler = torch.optim.lr_scheduler.OneCycleLR(self.policy_optim, max_lr=8e-4, total_steps=lr_one_cycle_steps)
 
     def update_parameters(self, memory, updates):
@@ -43,14 +44,14 @@ class BC(BaseAgent):
         self.policy_optim.zero_grad()
         policy_loss.backward()
         self.policy_optim.step()
-        try:
-            if self.lr_scheduler is not None:
-                self.lr_scheduler.step()
-        except ValueError as e:
-            pass
         lr = self.lr
         if self.lr_scheduler is not None:
-            lr = self.scheduler.get_last_lr()
+            lr = self.lr_scheduler.get_last_lr()
+            try:
+                self.lr_scheduler.step()
+            except ValueError as e:
+                print(e)
+                pass
         return {
             'policy_abs_error': torch.abs(pred_action - sampled_batch['actions']).sum(-1).mean().item(),
             'policy_loss': policy_loss.item(),

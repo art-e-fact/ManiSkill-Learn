@@ -30,7 +30,7 @@ class BC(BaseAgent):
         self.lr = policy_optim_cfg["lr"]
         if lr_one_cycle_steps is not None:
             print("Using OneCycleLR")
-            self.lr_scheduler = torch.optim.lr_scheduler.OneCycleLR(self.policy_optim, max_lr=8e-4, total_steps=lr_one_cycle_steps)
+            self.lr_scheduler = torch.optim.lr_scheduler.OneCycleLR(self.policy_optim, max_lr=1.0e-4, total_steps=lr_one_cycle_steps)
 
     def update_parameters(self, memory, updates):
         sampled_batch = memory.sample(self.batch_size)
@@ -50,7 +50,6 @@ class BC(BaseAgent):
             try:
                 self.lr_scheduler.step()
             except ValueError as e:
-                print(e)
                 pass
         return {
             'policy_abs_error': torch.abs(pred_action - sampled_batch['actions']).sum(-1).mean().item(),

@@ -12,7 +12,7 @@ replay_cfg = dict(
     type='ReplayMemory',
     capacity=1000000,
 )
-nsteps = 23000
+nsteps = 25002
 train_mfrl_cfg = dict(
     total_steps=nsteps,
     warm_steps=0,
@@ -66,8 +66,8 @@ train_mfrl_cfg = dict(
     #'./full_mani_skill_data/OpenCabinetDrawer/OpenCabinetDrawer_1035_link_0-v0.h5',
     #'./full_mani_skill_data/OpenCabinetDrawer/OpenCabinetDrawer_1040_link_0-v0.h5',
     #'./full_mani_skill_data/OpenCabinetDrawer/OpenCabinetDrawer_1061_link_0-v0.h5',
-    #'./full_mani_skill_data/OpenCabinetDrawer/OpenCabinetDrawer_1066_link_0-v0.h5',
-    #'./full_mani_skill_data/OpenCabinetDrawer/OpenCabinetDrawer_1082_link_0-v0.h5',
+    './full_mani_skill_data/OpenCabinetDrawer/OpenCabinetDrawer_1066_link_0-v0.h5',
+    './full_mani_skill_data/OpenCabinetDrawer/OpenCabinetDrawer_1082_link_0-v0.h5',
 
 
     # Door environmentswith cabinet present at least once in both drawer and door
@@ -129,8 +129,8 @@ train_mfrl_cfg = dict(
     #'./full_mani_skill_data/OpenCabinetDoor/OpenCabinetDoor_1065_link_0-v0.h5',
     #'./full_mani_skill_data/OpenCabinetDoor/OpenCabinetDoor_1068_link_0-v0.h5',
     #'./full_mani_skill_data/OpenCabinetDoor/OpenCabinetDoor_1073_link_0-v0.h5',
-    #'./full_mani_skill_data/OpenCabinetDoor/OpenCabinetDoor_1077_link_0-v0.h5',
-    #'./full_mani_skill_data/OpenCabinetDoor/OpenCabinetDoor_1081_link_0-v0.h5',
+    './full_mani_skill_data/OpenCabinetDoor/OpenCabinetDoor_1077_link_0-v0.h5',
+    './full_mani_skill_data/OpenCabinetDoor/OpenCabinetDoor_1081_link_0-v0.h5',
 
     ]
 )

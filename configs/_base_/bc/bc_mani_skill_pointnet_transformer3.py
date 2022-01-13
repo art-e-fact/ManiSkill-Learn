@@ -21,7 +21,7 @@ agent = dict(
                 conv_cfg=dict(
                     type='ConvMLP',
                     norm_cfg=None,
-                    mlp_spec=['agent_shape + pcd_xyz_rgb_channel', 512, 256 + 256 * stack_frame],
+                    mlp_spec=[46, 512, 256 + 256 * stack_frame],
                     bias='auto',
                     inactivated_output=True,
                     conv_init_cfg=dict(type='xavier_init', gain=1, bias=0),
@@ -29,7 +29,7 @@ agent = dict(
                 mlp_cfg=dict(
                     type='LinearMLP',
                     norm_cfg=None,
-                    mlp_spec=[256 + 256 * stack_frame, 512, tr_size-2],
+                    mlp_spec=[256 + 256 * stack_frame, 512, tr_size],
                     bias='auto',
                     inactivated_output=True,
                     linear_init_cfg=dict(type='xavier_init', gain=1, bias=0),
@@ -40,7 +40,7 @@ agent = dict(
             state_mlp_cfg=dict(
                 type='LinearMLP',
                 norm_cfg=None,
-                mlp_spec=['agent_shape', 256, tr_size-2],
+                mlp_spec=[40, 256, tr_size],
                 bias='auto',
                 inactivated_output=True,
                 linear_init_cfg=dict(type='xavier_init', gain=1, bias=0),
@@ -76,14 +76,14 @@ agent = dict(
             final_mlp_cfg=dict(
                 type='LinearMLP',
                 norm_cfg=None,
-                mlp_spec=[tr_size, 1024, 512, 'action_shape'],
+                mlp_spec=[tr_size+2, 1024, 512, 'action_shape'],
                 bias='auto',
                 inactivated_output=True,
                 linear_init_cfg=dict(type='xavier_init', gain=1, bias=0),
             ),
         ),
         optim_cfg=dict(type='AdamW', lr=1e-4, weight_decay=1e-4),
-        lr_one_cycle_steps=21001,
+        lr_one_cycle_steps=24001,
     ),
 )
 

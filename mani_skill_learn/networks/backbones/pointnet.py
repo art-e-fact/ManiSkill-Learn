@@ -148,11 +148,13 @@ class PointNetWithInstanceInfoV0(PointBackbone):
         pcd['rgb'] = pcd['rgb'][:,:,p] + torch.tensor(0.05).to(dev) * (torch.rand(3).to(dev)-torch.tensor(0.5).to(dev))
 
         obj_features = []
-        obj_features.append(torch.cat([self.state_mlp(state), task], dim=1))
+        state  = torch.cat([state, task], dim=1)
+        obj_features.append(self.state_mlp(state))
+        #obj_features.append(torch.cat([self.state_mlp(state), task], dim=1))
         for i in range(len(obj_masks)):
             obj_mask = obj_masks[i]
             of = self.pcd_pns[i].forward_raw(pcd, state, obj_mask)
-            of = torch.cat([of, task], dim=1)
+            #of = torch.cat([of, task], dim=1)
             obj_features.append(of)  # [B, F]
         if self.attn is not None:
             obj_features = torch.stack(obj_features, dim=-2)  # [B, NO + 3, F]
@@ -163,7 +165,6 @@ class PointNetWithInstanceInfoV0(PointBackbone):
             global_feature = self.attn(obj_features, obj_attn_mask)  # [B, F]
         else:
             global_feature = torch.cat(obj_features, dim=-1)  # [B, (NO + 3) * F]
-        #global_feature = torch.cat([global_feature, task], dim=1)
+        global_feature = torch.cat([global_feature, task], dim=1)
         x = self.global_mlp(global_feature)
-        # print(x)
         return x

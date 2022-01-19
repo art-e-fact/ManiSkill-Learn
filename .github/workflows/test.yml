@@ -13,13 +13,6 @@ jobs:
           ref: "feature/run-basic"
           token: ${{ secrets.PAT_TOKEN }}
           path: 'ManiSkill'
-      - name: Private actions checkout
-        uses: daspn/private-actions-checkout@v2
-        with:
-          actions_list: '["warp-art/action-buildtest@main"]'
-          checkout_base_path: ./.github/actions
-          app_id: ${{ secrets.APP_ID }}
-          app_private_key: ${{ secrets.APP_PRIVATE_KEY }}
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -29,6 +22,18 @@ jobs:
       - name: Download model
         run: |
           aws s3 cp s3://maniskill-models/OpenCabinetDrawer.ckpt .
+      - name: Private actions checkout
+        uses: daspn/private-actions-checkout@v2
+        with:
+          actions_list: '["warp-art/action-buildtest@main"]'
+          checkout_base_path: ./.github/actions
+          app_id: ${{ secrets.APP_ID }}
+          app_private_key: ${{ secrets.APP_PRIVATE_KEY }}
       - uses: ./.github/actions/action-buildtest
         with:
           account_id: action_test
+          api_key: ${{ secrets.WARP_API_KEY}}
+      - uses: art-e-fact/action-runsimjob
+        with:
+          account_id: action_test
+          api_key: ${{ secrets.WARP_API_KEY}}

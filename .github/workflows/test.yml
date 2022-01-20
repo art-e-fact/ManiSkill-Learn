@@ -33,7 +33,3 @@ jobs:
         with:
           account_id: action_test
           api_key: ${{ secrets.WARP_API_KEY}}
-      - uses: art-e-fact/action-runsimjob
-        with:
-          account_id: action_test
-          api_key: ${{ secrets.WARP_API_KEY}}

@@ -1,3 +1,34 @@
+# Submission to ManiSkill Challenge
+
+The submission is based on ManiSkill-Learn.
+
+The submission for the OpenCabinetDoor and OpenCabinetDrawer task is based on this branch of the code which includes
+severall modification from the original ManiSkill-Learn.
+The model checkpoint is available in `models/OpenCabinetDoor_OpenCabinetDrawer.ckpt`
+
+the submission can be made from the checkpoints with
+
+```
+make submission
+```
+
+Training was done in 3 steps with the following commands with max learning rate of OneCycleLR policy in `mani_skill_learn/methods/brl/bc.py` successively set at [1e-4, 7.5e-3, 5e-4]:
+
+```
+python -m tools.run_rl configs/bc/2tasks_large.py --gpu-ids=0 --cfg-options "env_cfg.env_name=OpenCabinetDrawer_1045_link_0-v0" "eval_cfg.save_video=True" "eval_cfg.num=10" "eval_cfg.use_log=True" --work-dir=./test/OpenCabinetDrawerDoor/
+python -m tools.run_rl configs/bc/2tasks_large.py --gpu-ids=0 --cfg-options "env_cfg.env_name=OpenCabinetDrawer_1045_link_0-v0" "eval_cfg.save_video=True" "eval_cfg.num=10" "eval_cfg.use_log=True" --work-dir=./test/OpenCabinetDrawerDoor/  --resume-from=./test/OpenCabinetDrawerDoor/BC/models/model_25002.ckpt
+python -m tools.run_rl configs/bc/2tasks_large.py --gpu-ids=0 --cfg-options "env_cfg.env_name=OpenCabinetDrawer_1045_link_0-v0" "eval_cfg.save_video=True" "eval_cfg.num=10" "eval_cfg.use_log=True" --work-dir=./test/OpenCabinetDrawerDoor/  --resume-from=./test/OpenCabinetDrawerDoor/BC/models/model_25002.ckpt
+```
+
+sample evaluation can be done with:
+
+```
+python -m tools.run_rl configs/bc/2tasks_large.py --gpu-ids=0 --cfg-options "env_cfg.env_name=OpenCabinetDrawer_1045_link_0-v0" "eval_cfg.save_video=True" "eval_cfg.num=10" "eval_cfg.use_log=True" --work-dir=./test/OpenCabinetDrawerDoor/  --resume-from=./test/OpenCabinetDrawerDoor/BC/models/model_25002.ckpt --evaluation
+```
+
+The submission for the PushChair and MoveBucket task is the pretrained model with the code from the main branch 
+(i.e. no work was done on these challenges)
+
 # ManiSkill-Learn
 
 ManiSkill-Learn is a framework for training agents on [SAPIEN Open-Source Manipulation Skill Challenge](https://sapien.ucsd.edu/challenges/maniskill2021/), a physics-rich generalizable manipulation skill benchmark over diverse objects with large-scale demonstrations.

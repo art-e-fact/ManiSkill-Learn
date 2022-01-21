@@ -4,7 +4,7 @@ The submission is based on ManiSkill-Learn.
 
 The submission for the OpenCabinetDoor and OpenCabinetDrawer task is based on this branch of the code which includes
 severall modification from the original ManiSkill-Learn.
-The model checkpoint is available in `models/OpenCabinetDoor_OpenCabinetDrawer.ckpt`
+The model checkpoint is available in `models/OpenCabinetDoor_OpenCabinetDrawer.ckpt` (valid for both tasks)
 
 the submission can be made from the checkpoints with
 
@@ -26,8 +26,10 @@ sample evaluation can be done with:
 python -m tools.run_rl configs/bc/2tasks_large.py --gpu-ids=0 --cfg-options "env_cfg.env_name=OpenCabinetDrawer_1045_link_0-v0" "eval_cfg.save_video=True" "eval_cfg.num=10" "eval_cfg.use_log=True" --work-dir=./test/OpenCabinetDrawerDoor/  --resume-from=./test/OpenCabinetDrawerDoor/BC/models/model_25002.ckpt --evaluation
 ```
 
-The submission for the PushChair and MoveBucket task is the pretrained model with the code from the main branch 
-(i.e. no work was done on these challenges)
+The submission for the PushChair and MoveBucket task are the pretrained models (`models/PushChair-v0_PN_Transformer.ckpt` and `models/MoveBucket-v0_PN_Transformer.ckpt`) with the code from the main branch  (i.e. no work was done on these challenges)
+
+Please check instructions below for more instructions related to ManiSkill-Learn
+
 
 # ManiSkill-Learn
 
